@@ -133,7 +133,7 @@ public abstract class Entity {
                   String left2,
                   String right1,
                   String right2) {
-        location = new Location(horizontalCoordinate, verticalCoordinate);
+        this.location = new Location(horizontalCoordinate, verticalCoordinate);
         this.height = height;
         this.width = width;
 

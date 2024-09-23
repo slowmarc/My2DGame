@@ -10,6 +10,7 @@ import java.awt.*;
 public class TileManager {
     private GamePanel gamePanel;
     private final Tile[] tiles;
+    private int map[][];
 
     public TileManager(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
@@ -17,26 +18,33 @@ public class TileManager {
 
         tiles[0] = new GrassTile(gamePanel.getTileSize(), gamePanel.getTileSize());
         tiles[1] = new WaterTile(gamePanel.getTileSize(), gamePanel.getTileSize());
+        map = new int[gamePanel.getMaximumWorldWidth()][gamePanel.getMaximumWorldHeight()];
     }
 
     public void draw(Graphics graphics) {
-        int columnIndex = 0;
-        int rowIndex = 0;
+        int worldWidthIndex = 0;
+        int worldHeightIndex = 0;
 
-        int horizontalCoordinate = 0;
-        int verticalCoordinate = 0;
+        while (worldWidthIndex < gamePanel.getMaximumWorldWidth() && worldHeightIndex < gamePanel.getMaximumWorldHeight()) {
+            int tileIndex = map[worldWidthIndex][worldHeightIndex];
 
-        while (columnIndex < gamePanel.getMaximumScreenHorizontal() && rowIndex < gamePanel.getMaximumScreenVertical()) {
-            graphics.drawImage(tiles[0].getImage(), horizontalCoordinate, verticalCoordinate, tiles[0].getHeight(), tiles[0].getWidth(), null);
-            columnIndex++;
-            horizontalCoordinate += gamePanel.getTileSize();
+            int worldHorizontalCoordinate = worldWidthIndex * gamePanel.getTileSize();
+            int worldVerticalCoordinate = worldHeightIndex * gamePanel.getTileSize();
 
-            if (columnIndex == gamePanel.getMaximumScreenHorizontal()) {
-                columnIndex = 0;
-                horizontalCoordinate = 0;
+            int screenHorizontalCoordinate = worldHorizontalCoordinate - gamePanel.getPlayerManager().getPlayer().getLocation().getHorizontalCoordinate() + gamePanel.getPlayerManager().getPlayer().getCamera().getHorizontalCoordinate();
+            int screenVerticalCoordinate = worldVerticalCoordinate - gamePanel.getPlayerManager().getPlayer().getLocation().getVerticalCoordinate() + gamePanel.getPlayerManager().getPlayer().getCamera().getVerticalCoordinate();
 
-                rowIndex++;
-                verticalCoordinate += gamePanel.getTileSize();
+            if (worldHorizontalCoordinate + gamePanel.getTileSize() > gamePanel.getPlayerManager().getPlayer().getLocation().getHorizontalCoordinate() - gamePanel.getPlayerManager().getPlayer().getCamera().getHorizontalCoordinate()
+                    && worldHorizontalCoordinate - gamePanel.getTileSize() < gamePanel.getPlayerManager().getPlayer().getLocation().getHorizontalCoordinate() + gamePanel.getPlayerManager().getPlayer().getCamera().getHorizontalCoordinate()
+                    && worldVerticalCoordinate + gamePanel.getTileSize() > gamePanel.getPlayerManager().getPlayer().getLocation().getVerticalCoordinate() - gamePanel.getPlayerManager().getPlayer().getCamera().getVerticalCoordinate()
+                    && worldVerticalCoordinate - gamePanel.getTileSize() < gamePanel.getPlayerManager().getPlayer().getLocation().getVerticalCoordinate() + gamePanel.getPlayerManager().getPlayer().getCamera().getVerticalCoordinate()) {
+                graphics.drawImage(tiles[tileIndex].getImage(), screenHorizontalCoordinate, screenVerticalCoordinate, tiles[tileIndex].getHeight(), tiles[tileIndex].getWidth(), null);
+            }
+            worldWidthIndex++;
+
+            if (worldWidthIndex == gamePanel.getMaximumWorldWidth()) {
+                worldWidthIndex = 0;
+                worldHeightIndex++;
             }
         }
     }

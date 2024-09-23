@@ -6,6 +6,26 @@ import java.awt.event.KeyListener;
 import static entity.Entity.Direction.DOWN;
 
 public final class Player extends Entity {
+    private Camera camera;
+
+    public class Camera {
+        private final int horizontalCoordinate;
+        private final int verticalCoordinate;
+
+        public Camera(int horizontalCoordinate, int verticalCoordinate) {
+            this.horizontalCoordinate = horizontalCoordinate;
+            this.verticalCoordinate = verticalCoordinate;
+        }
+
+        public int getHorizontalCoordinate() {
+            return horizontalCoordinate;
+        }
+
+        public int getVerticalCoordinate() {
+            return verticalCoordinate;
+        }
+    }
+
     private KeyHandler keyHandler;
 
     public class KeyHandler implements KeyListener {
@@ -75,15 +95,8 @@ public final class Player extends Entity {
         }
     }
 
-    public Player(int horizontalCoordinate, int verticalCoordinate, int height, int width) {
-        super(horizontalCoordinate,
-                verticalCoordinate,
-                height,
-                width,
-                4,
-                20,
-                20,
-                DOWN,
+    public Player(int locationHorizontalCoordinate, int locationVerticalCoordinate, int height, int width, int cameraHorizontalCoordinate, int cameraVerticalCoordinate) {
+        super(locationHorizontalCoordinate, locationVerticalCoordinate, height, width, 4, 20, 20, DOWN,
                 "/player/boy_up_1.png",
                 "/player/boy_up_2.png",
                 "/player/boy_down_1.png",
@@ -92,7 +105,13 @@ public final class Player extends Entity {
                 "/player/boy_left_2.png",
                 "/player/boy_right_1.png",
                 "/player/boy_right_2.png");
+
+        camera = new Camera(cameraHorizontalCoordinate, cameraVerticalCoordinate);
         keyHandler = new KeyHandler();
+    }
+
+    public Camera getCamera() {
+        return camera;
     }
 
     public KeyHandler getKeyHandler() {

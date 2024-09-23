@@ -1,7 +1,6 @@
 package manager;
 
 import entity.Entity;
-import entity.Player;
 import main.GamePanel;
 
 import java.awt.*;
@@ -25,36 +24,6 @@ public class EntityManager {
         entities.add(entity);
     }
 
-    public void updatePlayer() {
-        Player player = null;
-        for (Entity entity : entities) {
-            if (entity instanceof Player) {
-                player = (Player) entity;
-            }
-        }
-        Player.KeyHandler keyHandler = player.getKeyHandler();
-
-        if (!keyHandler.isUpPressed() && !keyHandler.isDownPressed() && !keyHandler.isLeftPressed() && !keyHandler.isRightPressed()) {
-            return;
-        }
-
-        if (keyHandler.isUpPressed()) {
-            player.moveUp();
-        } else if (keyHandler.isDownPressed()) {
-            player.moveDown();
-        } else if (keyHandler.isLeftPressed()) {
-            player.moveLeft();
-        } else if (keyHandler.isRightPressed()) {
-            player.moveRight();
-        }
-
-        Entity.MoveSprite moveSprite = player.getMoveSprite();
-        moveSprite.setSpriteCounter(moveSprite.getSpriteCounter() + 1);
-        if (moveSprite.getSpriteCounter() > 15) {
-            moveSprite.setSpriteNumber(moveSprite.getSpriteNumber() == 1 ? 2 : 1);
-            moveSprite.setSpriteCounter(0);
-        }
-    }
 
     public void draw(Graphics graphics) {
         BufferedImage sprite = null;
